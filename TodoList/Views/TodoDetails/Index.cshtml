@@ -1,0 +1,41 @@
+﻿@model TodoList.Models.TodoDetail
+<!--this particular views expects the todolists-->
+
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+
+@*removing the following code and building ajax call to create the form*@
+
+@*<h2>Index</h2>
+    <p>@Html.ActionLink("Create New", "Create")</p>*@
+
+@*using ajax helper to create todo form*@
+
+<div id="tabView"></div>
+
+<div id="todoCreate">
+    @using (Ajax.BeginForm("AjaxCreate", "TodoDetails", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        UpdateTargetId = "tabView"
+    }))
+    {
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" id="create" value="Create New Todo" class="btn btn-default" onclick="location.href='TodoDetails/Create';" />
+        </div>
+    </div>
+    }
+</div>
+@section Scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts_Customized/tabJS.js"></script>
+
+    @* <!--this will load client side validation--> *@
+    @Scripts.Render("~/bundles/jqueryval")
+}

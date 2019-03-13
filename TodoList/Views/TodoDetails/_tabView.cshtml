@@ -1,0 +1,69 @@
+﻿@model IEnumerable<TodoList.Models.TodoDetail>
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Description)*@
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Isdone)*@
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @if (!item.IsParent)
+            {
+                <td></td>
+            }
+            @*<td id="Description_@item.ID" class="Description_@item.ParentID" >*@
+            <td>
+                @if (!item.Isdone)
+                {
+                    if (item.DeadlineDate > DateTime.Now)
+                    {
+                        @Html.DisplayFor(modelItem => item.Description)
+                    }
+                    else
+                    {
+                        <span style="background-color: #ff0000">@Html.DisplayFor(modelItem => item.Description)</span>
+                    }
+                }
+                else
+                {
+                    <span style="background-color: #FFFF00">@Html.DisplayFor(modelItem => item.Description)</span>
+                }
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DeadlineDate)
+            </td>
+
+
+            @*<td id="Isdone_@item.ID" class="Isdone_@item.ParentID">*@
+            <td>
+                @Html.CheckBoxFor(modelItem => item.Isdone, new { id = item.ID, @class = "ActiveCheck " + item.ParentID })
+                @*//so whenever this item will be made, an id will be assigned to that item because id is primary key
+                    //classname is given to identify the element*@
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @if (item.IsParent)
+                {
+                    @Html.ActionLink("| Create SUB", "CreateChild", new { id = item.ID })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script src="~/Scripts_Customized/checkboxJS.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" />
+<!-- Required jQuery and jQuery UI Javascript references -->
+<!--this js is added to the pv because we want this event listeners to be added anytime this table is created-->
+<!--if this is place in index.cshtml then it will only run the first time the page loads-->
